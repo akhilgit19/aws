@@ -1,1 +1,260 @@
 
+EC2 Setup Configuration  
+--------------------------
+Software need to install
+- create two folders keypair and software
+- Git bash for windows 
+  - Step1- install  Gitbash and paste in software.
+  - Step2- After installing and click on right click you cansee GITGUI here, gitbash here
+  - Step3- click on gitbash here it works like a unix editor
+- Install puttyGen -64bit and paste in the software 
+- Download putty   -64bit and paste in the software 
+
+
+Creation of EC2 Instance
+--------------------------
+Step1- click on ec2 in searchbar and click on it Check in N.virginia
+Step2- click on launch instance
+Step3- name as WebServer 
+Step4- In Amazon Machin Image click on amazon linux and volume type kernel5.10,ssd volume type Freetier
+Step5- Instance type - t2.micro 
+Step6- Keypair- click on create new key pair nameas Linux-machine , keypairtype- RSA and Private key file
+       format- pem
+Step7- clickon create key pair it will download the pem file on your system
+Step8- Network settings click on edit
+Step9- choose defualt vpc , subnet - no preference(datacenters), Auto-assign publicIP- enable
+Step10- click on create security group
+Step11- name as Linux-SG1
+Step12- copy the same in description
+Step13- security group rule1  type ssh source type -anywhere 0.0.0.0/0
+Step14- click on add security rule
+Step15- type- all traffic , source type anywhere 0.0.0.0/0 -----not advisible in organzation 
+Step16- Configure storage  8 gib and gp2  roote volume(which is default)
+Step17- click on launch instance 
+
+1st way to connect to Instance
+--------------------------------
+Step18- open the pem file copy and paste in the keypair folder 
+Step19- go to the keypair folder click on right click on and click gitbashere and it will open
+Step20- ls
+Step21- ls -lrt Linux-machine.pem
+Step22- select the instance and click on connect and if you want to connect instantly 
+        click on instance connect(but it is not advisible generally used to check inurgency)
+Step23- select the instance and click on connect and click on ssh client
+Step24- come to the gitbash
+Step25- pwd
+Step26- check pem file is present 
+Step27- chmod 400 Linux-machine.pem
+Step28- now check ls -lrt Linux-machine.pem
+Step29- copy the fourth step command and paste here
+Step30- yes
+Step31- sudo su
+Step32- ls
+Step33- touch file2.txt 
+
+2nd way to connect to instance
+----------------------------------
+Step18- open putty gen and click on generate and move your cursor in blank area
+Step19- click on load and click on allfiles and select your Linux-machine.pem and click on save private key
+Step20- click on yes and give name Linux-machine.ppk or Linux-machine
+Step21- click on save 
+Step22- now open putty and paste the public ip address in the host name( but in the org we use private Ip address)
+Step23- click on ssh and click on auth and click on browse and select your Linux-machine.ppk or Linux-machine
+Step24- click on yes and click accept
+Step25- login as: ec2-user
+Step26- sudo su
+Step27- ls
+Step28- yum update -y (installing packages from the net)
+Step29- yum install -y httpd (apache web server)
+Step30- service httpd status ( to verify the apache web server)
+Step31- service httpd restart
+Step32- service httpd status 
+Step33- now take the public ip and past it in new browser you can see the webpage of apache
+Step34- cd /var/www/html/
+Step35- vi index.html
+<html>
+        <b>Welcome to ec2 Demo</b>
+        <h1><p style="color:red;">Welcome to Aapache  Webserver</p></h1>
+</html>
+~        
+Step36- escape :wq
+Step37- now open this page and you can see the content of the webpage
+
+Keypair in ec2 dashboard
+--------------------------
+Step1- click on keypair and click create keypair name- test2
+Step2- keypairtype- RSA and Private key file
+       format- pem and click on create key pair
+
+
+Lab:
+=====
+
+akhilpagadapoola@Akhils-MacBook-Air Aws_EC2_Instance % ls
+Linux-machine.pem
+akhilpagadapoola@Akhils-MacBook-Air Aws_EC2_Instance % ls -lrt
+total 8
+-rw-r--r--@ 1 akhilpagadapoola  staff  1674 Jul  5 10:40 Linux-machine.pem
+akhilpagadapoola@Akhils-MacBook-Air Aws_EC2_Instance % chmod 400 "Linux-machine.pem"
+akhilpagadapoola@Akhils-MacBook-Air Aws_EC2_Instance % ls -lrt
+total 8
+-r--------@ 1 akhilpagadapoola  staff  1674 Jul  5 10:40 Linux-machine.pem
+akhilpagadapoola@Akhils-MacBook-Air Aws_EC2_Instance % ssh -i "Linux-machine.pem" ec2-user@ec2-54-210-247-16.compute-1.amazonaws.com
+The authenticity of host 'ec2-54-210-247-16.compute-1.amazonaws.com (54.210.247.16)' can't be established.
+ED25519 key fingerprint is SHA256:PheFdKIMDFWlKGbFBm5bZj1153L8rqrWIKXpdORfrGc.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added 'ec2-54-210-247-16.compute-1.amazonaws.com' (ED25519) to the list of known hosts.
+   ,     #_
+   ~\_  ####_        Amazon Linux 2
+  ~~  \_#####\
+  ~~     \###|       AL2 End of Life is 2025-06-30.
+  ~~       \#/ ___
+   ~~       V~' '->
+    ~~~         /    A newer version of Amazon Linux is available!
+      ~~._.   _/
+         _/ _/       Amazon Linux 2023, GA and supported until 2028-03-15.
+       _/m/'           https://aws.amazon.com/linux/amazon-linux-2023/
+
+-bash: warning: setlocale: LC_CTYPE: cannot change locale (UTF-8): No such file or directory
+[ec2-user@ip-172-31-86-85 ~]$ ls
+[ec2-user@ip-172-31-86-85 ~]$ sudo su
+[root@ip-172-31-86-85 ec2-user]# ls
+[root@ip-172-31-86-85 ec2-user]# touch file1.txt
+[root@ip-172-31-86-85 ec2-user]#
+[root@ip-172-31-86-85 ec2-user]# yum update -y
+Failed to set locale, defaulting to C
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+No packages marked for update
+[root@ip-172-31-86-85 ec2-user]# yum install -y httpd
+Failed to set locale, defaulting to C
+Loaded plugins: extras_suggestions, langpacks, priorities, update-motd
+Resolving Dependencies
+--> Running transaction check
+---> Package httpd.x86_64 0:2.4.59-1.amzn2 will be installed
+--> Processing Dependency: httpd-filesystem = 2.4.59-1.amzn2 for package: httpd-2.4.59-1.amzn2.x86_64
+--> Processing Dependency: httpd-tools = 2.4.59-1.amzn2 for package: httpd-2.4.59-1.amzn2.x86_64
+--> Processing Dependency: /etc/mime.types for package: httpd-2.4.59-1.amzn2.x86_64
+--> Processing Dependency: httpd-filesystem for package: httpd-2.4.59-1.amzn2.x86_64
+--> Processing Dependency: mod_http2 for package: httpd-2.4.59-1.amzn2.x86_64
+--> Processing Dependency: system-logos-httpd for package: httpd-2.4.59-1.amzn2.x86_64
+--> Processing Dependency: libapr-1.so.0()(64bit) for package: httpd-2.4.59-1.amzn2.x86_64
+--> Processing Dependency: libaprutil-1.so.0()(64bit) for package: httpd-2.4.59-1.amzn2.x86_64
+--> Running transaction check
+---> Package apr.x86_64 0:1.7.2-1.amzn2 will be installed
+---> Package apr-util.x86_64 0:1.6.3-1.amzn2.0.1 will be installed
+--> Processing Dependency: apr-util-bdb(x86-64) = 1.6.3-1.amzn2.0.1 for package: apr-util-1.6.3-1.amzn2.0.1.x86_64
+---> Package generic-logos-httpd.noarch 0:18.0.0-4.amzn2 will be installed
+---> Package httpd-filesystem.noarch 0:2.4.59-1.amzn2 will be installed
+---> Package httpd-tools.x86_64 0:2.4.59-1.amzn2 will be installed
+---> Package mailcap.noarch 0:2.1.41-2.amzn2 will be installed
+---> Package mod_http2.x86_64 0:1.15.19-1.amzn2.0.2 will be installed
+--> Running transaction check
+---> Package apr-util-bdb.x86_64 0:1.6.3-1.amzn2.0.1 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+===================================================================================================
+ Package                     Arch           Version                       Repository          Size
+===================================================================================================
+Installing:
+ httpd                       x86_64         2.4.59-1.amzn2                amzn2-core         1.4 M
+Installing for dependencies:
+ apr                         x86_64         1.7.2-1.amzn2                 amzn2-core         130 k
+ apr-util                    x86_64         1.6.3-1.amzn2.0.1             amzn2-core         101 k
+ apr-util-bdb                x86_64         1.6.3-1.amzn2.0.1             amzn2-core          22 k
+ generic-logos-httpd         noarch         18.0.0-4.amzn2                amzn2-core          19 k
+ httpd-filesystem            noarch         2.4.59-1.amzn2                amzn2-core          25 k
+ httpd-tools                 x86_64         2.4.59-1.amzn2                amzn2-core          89 k
+ mailcap                     noarch         2.1.41-2.amzn2                amzn2-core          31 k
+ mod_http2                   x86_64         1.15.19-1.amzn2.0.2           amzn2-core         149 k
+
+Transaction Summary
+===================================================================================================
+Install  1 Package (+8 Dependent packages)
+
+Total download size: 1.9 M
+Installed size: 5.3 M
+Downloading packages:
+(1/9): apr-util-1.6.3-1.amzn2.0.1.x86_64.rpm                                | 101 kB  00:00:00     
+(2/9): apr-1.7.2-1.amzn2.x86_64.rpm                                         | 130 kB  00:00:00     
+(3/9): apr-util-bdb-1.6.3-1.amzn2.0.1.x86_64.rpm                            |  22 kB  00:00:00     
+(4/9): generic-logos-httpd-18.0.0-4.amzn2.noarch.rpm                        |  19 kB  00:00:00     
+(5/9): httpd-filesystem-2.4.59-1.amzn2.noarch.rpm                           |  25 kB  00:00:00     
+(6/9): httpd-2.4.59-1.amzn2.x86_64.rpm                                      | 1.4 MB  00:00:00     
+(7/9): httpd-tools-2.4.59-1.amzn2.x86_64.rpm                                |  89 kB  00:00:00     
+(8/9): mailcap-2.1.41-2.amzn2.noarch.rpm                                    |  31 kB  00:00:00     
+(9/9): mod_http2-1.15.19-1.amzn2.0.2.x86_64.rpm                             | 149 kB  00:00:00     
+---------------------------------------------------------------------------------------------------
+Total                                                              7.5 MB/s | 1.9 MB  00:00:00     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : apr-1.7.2-1.amzn2.x86_64                                                        1/9 
+  Installing : apr-util-1.6.3-1.amzn2.0.1.x86_64                                               2/9 
+  Installing : apr-util-bdb-1.6.3-1.amzn2.0.1.x86_64                                           3/9 
+  Installing : httpd-tools-2.4.59-1.amzn2.x86_64                                               4/9 
+  Installing : generic-logos-httpd-18.0.0-4.amzn2.noarch                                       5/9 
+  Installing : mailcap-2.1.41-2.amzn2.noarch                                                   6/9 
+  Installing : httpd-filesystem-2.4.59-1.amzn2.noarch                                          7/9 
+  Installing : mod_http2-1.15.19-1.amzn2.0.2.x86_64                                            8/9 
+  Installing : httpd-2.4.59-1.amzn2.x86_64                                                     9/9 
+  Verifying  : httpd-tools-2.4.59-1.amzn2.x86_64                                               1/9 
+  Verifying  : apr-util-bdb-1.6.3-1.amzn2.0.1.x86_64                                           2/9 
+  Verifying  : httpd-2.4.59-1.amzn2.x86_64                                                     3/9 
+  Verifying  : apr-1.7.2-1.amzn2.x86_64                                                        4/9 
+  Verifying  : httpd-filesystem-2.4.59-1.amzn2.noarch                                          5/9 
+  Verifying  : mod_http2-1.15.19-1.amzn2.0.2.x86_64                                            6/9 
+  Verifying  : apr-util-1.6.3-1.amzn2.0.1.x86_64                                               7/9 
+  Verifying  : mailcap-2.1.41-2.amzn2.noarch                                                   8/9 
+  Verifying  : generic-logos-httpd-18.0.0-4.amzn2.noarch                                       9/9 
+
+Installed:
+  httpd.x86_64 0:2.4.59-1.amzn2                                                                    
+
+Dependency Installed:
+  apr.x86_64 0:1.7.2-1.amzn2                     apr-util.x86_64 0:1.6.3-1.amzn2.0.1              
+  apr-util-bdb.x86_64 0:1.6.3-1.amzn2.0.1        generic-logos-httpd.noarch 0:18.0.0-4.amzn2      
+  httpd-filesystem.noarch 0:2.4.59-1.amzn2       httpd-tools.x86_64 0:2.4.59-1.amzn2              
+  mailcap.noarch 0:2.1.41-2.amzn2                mod_http2.x86_64 0:1.15.19-1.amzn2.0.2           
+
+Complete!
+[root@ip-172-31-86-85 ec2-user]# service httpd status
+Redirecting to /bin/systemctl status httpd.service
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:httpd.service(8)
+[root@ip-172-31-86-85 ec2-user]# service httpd restart
+Redirecting to /bin/systemctl restart httpd.service
+[root@ip-172-31-86-85 ec2-user]# service httpd status
+Redirecting to /bin/systemctl status httpd.service
+● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; disabled; vendor preset: disabled)
+   Active: active (running) since Fri 2024-07-05 05:59:13 UTC; 8s ago
+     Docs: man:httpd.service(8)
+ Main PID: 3354 (httpd)
+   Status: "Processing requests..."
+   CGroup: /system.slice/httpd.service
+           ├─3354 /usr/sbin/httpd -DFOREGROUND
+           ├─3355 /usr/sbin/httpd -DFOREGROUND
+           ├─3356 /usr/sbin/httpd -DFOREGROUND
+           ├─3357 /usr/sbin/httpd -DFOREGROUND
+           ├─3358 /usr/sbin/httpd -DFOREGROUND
+           └─3359 /usr/sbin/httpd -DFOREGROUND
+
+Jul 05 05:59:13 ip-172-31-86-85.ec2.internal systemd[1]: Starting The Apache HTTP Server...
+Jul 05 05:59:13 ip-172-31-86-85.ec2.internal systemd[1]: Started The Apache HTTP Server.
+[root@ip-172-31-86-85 ec2-user]#
+[root@ip-172-31-86-85 ec2-user]# cd /var/www/html
+[root@ip-172-31-86-85 html]# vi index.html
+
+<html>
+        <b>Welcome to ec2 Demo</b>
+        <h1><p style="color:red;">Welcome to Aapache  Webserver</p></h1>
+</html>
+
+
+
