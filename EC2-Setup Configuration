@@ -1,0 +1,154 @@
+
+EC2 Setup Configuration  
+--------------------------
+Software need to install
+- create two folders keypair and software
+- Git bash for windows 
+  - Step1- install  Gitbash and paste in software
+  - Step2- After installing and click on right click you cansee GITGUI here, gitbash here
+  - Step3- click on gitbash here it works like a unix editor
+- Install puttyGen -64bit and paste in the software 
+- Download putty   -64bit and paste in the software 
+
+
+Creation of EC2 Instance
+--------------------------
+Step1- click on ec2 in searchbar and click on it Check in N.virginia
+Step2- click on launch instance
+Step3- name as WebServer 
+Step4- In Amazon Machin Image click on amazon linux and volume type kernel5.10,ssd volume type Freetier
+Step5- Instance type - t2.micro 
+Step6- Keypair- click on create new key pair nameas Linux-machine , keypairtype- RSA and Private key file
+       format- pem
+Step7- clickon create key pair it will download the pem file on your system
+Step8- Network settings click on edit
+Step9- choose defualt vpc , subnet - no preference(datacenters), Auto-assign publicIP- enable
+Step10- click on create security group
+Step11- name as Linux-SG1
+Step12- copy the same in description
+Step13- security group rule1  type ssh source type -anywhere 0.0.0.0/0
+Step14- click on add security rule
+Step15- type- all traffic , source type anywhere 0.0.0.0/0 -----not advisible in organzation 
+Step16- Configure storage  8 gib and gp2  roote volume(which is default)
+Step17- click on launch instance 
+
+1st way to connect to Instance
+--------------------------------
+Step18- open the pem file copy and paste in the keypair folder 
+Step19- go to the keypair folder click on right click on and click gitbashere and it will open
+Step20- ls
+Step21- ls -lrt Linux-machine.pem
+Step22- select the instance and click on connect and if you want to connect instantly 
+        click on instance connect(but it is not advisible generally used to check inurgency)
+Step23- select the instance and click on connect and click on ssh client
+Step24- come to the gitbash
+Step25- pwd
+Step26- check pem file is present 
+Step27- chmod 400 Linux-machine.pem
+Step28- now check ls -lrt Linux-machine.pem
+Step29- copy the fourth step command and paste here
+Step30- yes
+Step31- sudo su
+Step32- ls
+Step33- touch file2.txt 
+
+2nd way to connect to instance
+----------------------------------
+Step18- open putty gen and click on generate and move your cursor in blank area
+Step19- click on load and click on allfiles and select your Linux-machine.pem and click on save private key
+Step20- click on yes and give name Linux-machine.ppk or Linux-machine
+Step21- click on save 
+Step22- now open putty and paste the public ip address in the host name
+Step23- click on ssh and click on auth and click on browse and select your Linux-machine.ppk or Linux-machine
+Step24- click on yes and click accept
+Step25- login as: ec2-user
+Step26- sudo su
+Step27- ls
+Step28- yum update -y (installing packages from the net)
+Step29- yum install -y httpd (apache web server)
+Step30- service httpd status ( to verify the apache web server)
+Step31- service httpd restart
+Step32- service httpd status 
+Step33- now take the public ip and past it in new browser you can see the webpage of apache
+Step34- cd /var/www/html/
+Step35- vi index.html
+Step36- escape :wq
+Step37- now open this page and you can see the content of the webpage
+
+Keypair in ec2 dashboard
+--------------------------
+Step1- click on keypair and click create keypair name- test2
+Step2- keypairtype- RSA and Private key file
+       format- pem and click on create key pair
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
